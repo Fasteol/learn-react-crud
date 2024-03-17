@@ -15,7 +15,7 @@ const Create = () => {
 
     setIsPending(true);
 
-    fetch("http://localhost:8000/blogs", {
+    fetch("https://vast-tan-capybara-boot.cyclic.app/blogs", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(blog),

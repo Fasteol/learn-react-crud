@@ -7,7 +7,7 @@ const Detail = () => {
     data: blog,
     isPending,
     error,
-  } = useFetch("http://localhost:8000/blogs/" + id);
+  } = useFetch("https://vast-tan-capybara-boot.cyclic.app/blogs/" + id);
   return (
     <div>
       {isPending && (

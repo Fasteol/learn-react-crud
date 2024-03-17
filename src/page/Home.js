@@ -1,6 +1,7 @@
 import { useState } from "react";
 import BlogList from "../component/BlogList";
 import useFetch from "../useFetch";
+import axios from "axios";
 
 const Home = () => {
   const {
@@ -8,22 +9,33 @@ const Home = () => {
     isPending,
     error,
     reFetch,
-  } = useFetch("http://localhost:8000/blogs");
+  } = useFetch("https://vast-tan-capybara-boot.cyclic.app/blogs");
 
   const [toast, isToast] = useState(false);
 
   const handleDelete = (id) => {
-    fetch("http://localhost:8000/blogs/" + id, {
-      method: "DELETE",
-    }).then(() => {
-      isToast(true);
-      reFetch();
-      console.log("Delete succesed");
-      setTimeout(() => {
-        isToast(false);
-      }, 1000);
-    });
+    const token = localStorage.getItem("token"); // Ambil token dari localStorage
+    const headers = {
+      Authorization: `Bearer ${token}`, // Tambahkan token ke header Authorization
+    };
+
+    axios
+      .delete(`https://vast-tan-capybara-boot.cyclic.app/blogs/${id}`, {
+        headers: headers, // Gunakan header yang ditentukan
+      })
+      .then(() => {
+        isToast(true);
+        reFetch();
+        console.log("Delete success");
+        setTimeout(() => {
+          isToast(false);
+        }, 1000);
+      })
+      .catch((error) => {
+        console.error("Error deleting blog:", error);
+      });
   };
+
   return (
     <div className="relative">
       {isPending && (

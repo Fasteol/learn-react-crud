@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
+import useFetch from "../useFetch";
 
 const Edit = () => {
   const { id } = useParams();
-  const [setData] = useState(null);
   const [isPending, setIsPending] = useState(false);
   const [toast, isToast] = useState(false);
   const [title, isTitle] = useState("");
@@ -11,26 +11,17 @@ const Edit = () => {
   const [author, isAuthor] = useState("");
   const history = useHistory();
 
+  const { data: blog } = useFetch(
+    "https://vast-tan-capybara-boot.cyclic.app/blogs/" + id
+  );
+
   useEffect(() => {
-    fetch(`http://localhost:8000/blogs/${id}`)
-      .then((res) => {
-        if (!res.ok) {
-          throw Error("could not fetch the data for that resource");
-        }
-        return res.json();
-      })
-      .then((data) => {
-        setData(data);
-        isTitle(data.title);
-        isBody(data.body);
-        isAuthor(data.author);
-      })
-      .catch((err) => {
-        if (err.name === "AbortError") {
-          console.log("fetch aborted");
-        }
-      });
-  }, [id]);
+    if (blog) {
+      isTitle(blog.title);
+      isBody(blog.body);
+      isAuthor(blog.author);
+    }
+  }, [blog]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -38,7 +29,7 @@ const Edit = () => {
 
     setIsPending(true);
 
-    fetch("http://localhost:8000/blogs/" + id, {
+    fetch("https://vast-tan-capybara-boot.cyclic.app/blogs/" + id, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(blog),
