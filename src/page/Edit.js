@@ -3,7 +3,7 @@ import { useHistory, useParams } from "react-router-dom";
 
 const Edit = () => {
   const { id } = useParams();
-  const [data, setData] = useState(null);
+  const [setData] = useState(null);
   const [isPending, setIsPending] = useState(false);
   const [toast, isToast] = useState(false);
   const [title, isTitle] = useState("");
