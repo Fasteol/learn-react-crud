@@ -25,7 +25,12 @@ const Home = () => {
     });
   };
   return (
-    <div>
+    <div className="relative">
+      {isPending && (
+        <div className=" inset-0 flex justify-center items-center z-50 min-h-screen">
+          <span className="loading loading-spinner loading-lg"></span>
+        </div>
+      )}
       {blogs && (
         <BlogList blogs={blogs} title="All Blogs!" onDelete={handleDelete} />
       )}

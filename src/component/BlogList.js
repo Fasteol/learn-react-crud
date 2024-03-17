@@ -5,8 +5,7 @@ const BlogList = ({ blogs, title, onDelete }) => {
     <div className="mt-16 mb-5 mx-5">
       <h2 className="text-2xl font-bold text-[#ddd]">{title}</h2>
       {blogs.map((blog) => (
-        <Link
-          to={`/detail/${blog.id}`}
+        <div
           className="card bg-neutral shadow-xl text-[#ddd] mt-5"
           key={blog.id}
         >
@@ -19,6 +18,23 @@ const BlogList = ({ blogs, title, onDelete }) => {
               <div>
                 <button>
                   <ul className="menu rounded-box">
+                    <li>
+                      <Link to={`/detail/${blog.id}`}>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 16 16"
+                          fill="currentColor"
+                          className="w-5 h-5"
+                        >
+                          <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z" />
+                          <path
+                            fillRule="evenodd"
+                            d="M1.38 8.28a.87.87 0 0 1 0-.566 7.003 7.003 0 0 1 13.238.006.87.87 0 0 1 0 .566A7.003 7.003 0 0 1 1.379 8.28ZM11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </Link>
+                    </li>
                     <li>
                       <Link to={`/edit/${blog.id}`}>
                         <svg
@@ -56,7 +72,7 @@ const BlogList = ({ blogs, title, onDelete }) => {
               </div>
             </div>
           </div>
-        </Link>
+        </div>
       ))}
     </div>
   );

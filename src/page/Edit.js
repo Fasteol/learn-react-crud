@@ -1,22 +1,42 @@
 import { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
-import useFetch from "../useFetch";
 
 const Edit = () => {
   const { id } = useParams();
-  const { data } = useFetch(`http://localhost:8000/blogs/${id}`);
+  const [data, setData] = useState(null);
   const [title, isTitle] = useState("");
   const [body, isBody] = useState("");
   const [author, isAuthor] = useState("");
   const history = useHistory();
 
   useEffect(() => {
-    if (data) {
-      isTitle(data.title);
-      isBody(data.body);
-      isAuthor(data.author);
-    }
-  }, [data]);
+    fetch(`http://localhost:8000/blogs/${id}`)
+      .then((res) => {
+        if (!res.ok) {
+          throw Error("could not fetch the data for that resource");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setData(data);
+        isTitle(data.title);
+        isBody(data.body);
+        isAuthor(data.author);
+      })
+      .catch((err) => {
+        if (err.name === "AbortError") {
+          console.log("fetch aborted");
+        }
+      });
+  });
+
+  // useEffect(() => {
+  //   if (data) {
+  //     isTitle(data.title);
+  //     isBody(data.body);
+  //     isAuthor(data.author);
+  //   }
+  // }, [data]);
 
   const handleSubmit = (e) => {
     e.preventDefault();

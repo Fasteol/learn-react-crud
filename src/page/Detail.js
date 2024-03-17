@@ -10,6 +10,11 @@ const Detail = () => {
   } = useFetch("http://localhost:8000/blogs/" + id);
   return (
     <div>
+      {isPending && (
+        <div className=" inset-0 flex justify-center items-center z-50 min-h-screen">
+          <span className="loading loading-spinner loading-lg"></span>
+        </div>
+      )}
       {blog && (
         <main className="pt-8 pb-16 lg:pt-16 lg:pb-24  antialiased">
           <div className="flex justify-between px-4 mx-auto max-w-screen-xl ">

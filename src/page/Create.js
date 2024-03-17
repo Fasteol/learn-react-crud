@@ -5,23 +5,31 @@ const Create = () => {
   const [title, isTitle] = useState("");
   const [body, isBody] = useState("");
   const [author, isAuthor] = useState("");
+  const [toast, isToast] = useState(false);
+  const [isPending, setIsPending] = useState(false);
   const history = useHistory();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const blog = { title, body, author };
 
-    // setIsPending(true);
+    setIsPending(true);
 
     fetch("http://localhost:8000/blogs", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(blog),
-    }).then(() => {
-      console.log("new blog added");
-      //   setIsPending(false);
-      history.push("/");
-    });
+    })
+      .then(() => {
+        isToast(true);
+      })
+      .then(() => {
+        setTimeout(() => {
+          setIsPending(false);
+          console.log("new blog added");
+          history.push("/");
+        }, 1000);
+      });
   };
 
   return (
@@ -29,9 +37,16 @@ const Create = () => {
       <h2 className="text-2xl font-bold text-[#ddd] text-center mt-10">
         Add a New Blog
       </h2>
+      {toast && (
+        <div className="toast toast-top toast-end">
+          <div className="alert alert-success">
+            <span className="text-[#ddd]">Create Success</span>
+          </div>
+        </div>
+      )}
       <div className="flex justify-center items-center mt-6">
-        <div class="card bg-base-200 shadow-xl">
-          <div class="card-body lg:w-[60vw] w-[80vw]">
+        <div className="card bg-base-200 shadow-xl">
+          <div className="card-body lg:w-[60vw] w-[80vw]">
             <form onSubmit={handleSubmit}>
               <div className="relative z-0 w-full mb-5 group">
                 <input
@@ -71,12 +86,22 @@ const Create = () => {
                   Name Author
                 </label>
               </div>
-              <button
-                type="submit"
-                className="text-white dark:bg-[#f1356d] dark:hover:bg-[#a4244b] dark:focus:[#f1356d] focus:ring-4 focus:outline-none focus:ring-[#f1356d] font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center "
-              >
-                Submit
-              </button>
+              {!isPending && (
+                <button
+                  type="submit"
+                  className="text-white dark:bg-[#f1356d] dark:hover:bg-[#a4244b] dark:focus:[#f1356d] focus:ring-4 focus:outline-none focus:ring-[#f1356d] font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center "
+                >
+                  Submit
+                </button>
+              )}
+              {isPending && (
+                <button
+                  type="submit"
+                  className="text-white dark:bg-[#f1356d] dark:hover:bg-[#a4244b] dark:focus:[#f1356d] focus:ring-4 focus:outline-none focus:ring-[#f1356d] font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center "
+                >
+                  Submiting...
+                </button>
+              )}
             </form>
           </div>
         </div>
