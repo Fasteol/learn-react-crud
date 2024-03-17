@@ -4,6 +4,8 @@ import { useHistory, useParams } from "react-router-dom";
 const Edit = () => {
   const { id } = useParams();
   const [data, setData] = useState(null);
+  const [isPending, setIsPending] = useState(false);
+  const [toast, isToast] = useState(false);
   const [title, isTitle] = useState("");
   const [body, isBody] = useState("");
   const [author, isAuthor] = useState("");
@@ -28,31 +30,29 @@ const Edit = () => {
           console.log("fetch aborted");
         }
       });
-  });
-
-  // useEffect(() => {
-  //   if (data) {
-  //     isTitle(data.title);
-  //     isBody(data.body);
-  //     isAuthor(data.author);
-  //   }
-  // }, [data]);
+  }, [id]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const blog = { title, body, author };
 
-    // setIsPending(true);
+    setIsPending(true);
 
     fetch("http://localhost:8000/blogs/" + id, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(blog),
-    }).then(() => {
-      console.log("new blog added");
-      //   setIsPending(false);
-      history.push("/");
-    });
+    })
+      .then(() => {
+        isToast(true);
+      })
+      .then(() => {
+        setTimeout(() => {
+          console.log("new blog added");
+          setIsPending(false);
+          history.push("/");
+        }, 1000);
+      });
   };
 
   return (
@@ -60,6 +60,13 @@ const Edit = () => {
       <h2 className="text-2xl font-bold text-[#ddd] text-center mt-10">
         Edit Blog
       </h2>
+      {toast && (
+        <div className="toast toast-top toast-end">
+          <div className="alert alert-success">
+            <span className="text-[#ddd]">Edit Success</span>
+          </div>
+        </div>
+      )}
       <div className="flex justify-center items-center mt-6">
         <div className="card bg-base-200 shadow-xl">
           <div className="card-body lg:w-[60vw] w-[80vw]">
@@ -102,12 +109,22 @@ const Edit = () => {
                   Name Author
                 </label>
               </div>
-              <button
-                type="submit"
-                className="text-white dark:bg-[#f1356d] dark:hover:bg-[#a4244b] dark:focus:[#f1356d] focus:ring-4 focus:outline-none focus:ring-[#f1356d] font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center "
-              >
-                Submit
-              </button>
+              {!isPending && (
+                <button
+                  type="submit"
+                  className="text-white dark:bg-[#f1356d] dark:hover:bg-[#a4244b] dark:focus:[#f1356d] focus:ring-4 focus:outline-none focus:ring-[#f1356d] font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center "
+                >
+                  Submit
+                </button>
+              )}
+              {isPending && (
+                <button
+                  type="submit"
+                  className="text-white dark:bg-[#f1356d] dark:hover:bg-[#a4244b] dark:focus:[#f1356d] focus:ring-4 focus:outline-none focus:ring-[#f1356d] font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center "
+                >
+                  Submiting...
+                </button>
+              )}
             </form>
           </div>
         </div>

@@ -13,7 +13,7 @@ const BlogList = ({ blogs, title, onDelete }) => {
             <div className="flex items-center justify-between w-full">
               <div>
                 <h2 className="card-title text-[#f1356d]">{blog.title}</h2>
-                <p>{blog.author}</p>
+                <p className="text-sm">{blog.author}</p>
               </div>
               <div>
                 <button>
